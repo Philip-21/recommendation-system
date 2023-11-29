@@ -3,10 +3,18 @@
 from ..utils.data_preprocessing import preprocess_user_preferences
 from ..utils.model_loading import load_recommendation_model
 from ..model import User, Job
+import os
+import joblib
 
 # Load the machine learning model
-model_path = '../../models/recommendations.pkl'
-model = load_recommendation_model(model_path)
+model_path = os.path.join(os.path.dirname(__file__), '../../models/recommendations.pkl')
+model = None
+
+if os.path.exists(model_path):
+    model = joblib.load(model_path)
+else:
+    print("Model file not found. Please train and save the model first.")
+
 
 def get_recommendations(user_id):
     user = User.query.get(user_id)

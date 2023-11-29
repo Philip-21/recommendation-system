@@ -4,8 +4,15 @@ from flask import Blueprint, request
 from flask_jwt_extended import create_access_token
 from ..services.auth_service import register_user, authenticate_user
 from ..utils.response_util import json_response
+from flask import jsonify
+from app import app
+
 
 auth_bp = Blueprint('auth_bp', __name__)
+
+@app.route('/')
+def index():
+    return jsonify({'message': 'Welcome to the Recommendation System API'})
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
