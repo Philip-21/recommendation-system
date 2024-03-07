@@ -1,7 +1,7 @@
 # auth_routes.py
 
 from flask import Blueprint, request
-from flask_jwt_extended import create_access_token
+# from flask_jwt_extended import create_access_token
 from ..services.auth_service import register_user, authenticate_user
 from ..utils.response_util import json_response
 from flask import jsonify
