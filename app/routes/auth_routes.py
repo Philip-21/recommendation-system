@@ -1,12 +1,24 @@
 # auth_routes.py
-
+import sys
+sys.path.append('../services/')
+sys.path.append('../utils/')
 from flask import Blueprint, request
 from flask_jwt_extended import create_access_token
-from ..services.auth_service import register_user, authenticate_user
-from ..utils.response_util import json_response
-from flask import jsonify
-from app import app
+from flask_jwt_extended import JWTManager
+from ..services import auth_service
+from ..utils import response_util
+from flask import jsonify, Flask
 
+# from app import app
+
+app = Flask(__name__)
+# Setup the Flask-JWT-Extended extension
+# app.config["JWT_SECRET_KEY"] = "929370b13"
+# Initialize the JWTManager with your Flask application
+jwt = JWTManager(app)
+# jwt.init_app(app)
+
+# jwt_manager = get_jwt_manager()
 
 auth_bp = Blueprint('auth_bp', __name__)
 
@@ -17,18 +29,18 @@ def index():
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
-    user = register_user(data['name'], data['email'], data['password'])
+    user = auth_service.register_user(data['name'], data['email'], data['password'])
     if user:
-        return json_response('User registered successfully', 201)
+        return response_util.json_response('User registered successfully', 201)
     else:
-        return json_response('User already exists', 409)
+        return response_util.json_response('User already exists', 409)
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
-    user = authenticate_user(data['email'], data['password'])
+    user = auth_service.authenticate_user(data['email'], data['password'])
     if user:
         access_token = create_access_token(identity=user.user_id)
-        return json_response('Login successful', access_token=access_token)
+        return response_util.json_response('Login successful', access_token=access_token)
     else:
-        return json_response('Invalid email or password', 401)
+        return response_util.json_response('Invalid email or password', 401)

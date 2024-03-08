@@ -1,10 +1,13 @@
 # controllers/recommendation_controller.py
-
+import sys
+sys.path.append('../utils/')
 from ..utils.data_preprocessing import preprocess_data
 from ..utils.model_loading import load_recommendation_model
-# from ..model import User, Job
+# from ..utils.data_model import User, Job
 from fuzzywuzzy import fuzz
+from typing import List
 import os
+import numpy as np
 
 # Load the machine learning model
 model_path = os.path.join(os.path.dirname(__file__), '../../models/recommender_model.pkl')
@@ -45,6 +48,34 @@ df = preprocess_data()
 
 #     return recommendations
 
+def convert_int64_to_int(data):
+    """
+    Recursively converts any instances of int64 to int in a nested data structure.
+
+    Parameters:
+        data: Any data structure that may contain instances of int64.
+
+    Returns:
+        The input data structure with int64 instances converted to int.
+
+    Note:
+        This function recursively traverses a nested data structure and converts
+        any instances of int64 to int. It supports dictionaries, lists, and single
+        int64 values.
+    """
+    if isinstance(data, dict):
+        # If data is a dictionary, convert each value recursively
+        return {key: convert_int64_to_int(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        # If data is a list, convert each item recursively
+        return [convert_int64_to_int(item) for item in data]
+    elif isinstance(data, np.int64):
+        # If data is an int64, convert it to int
+        return int(data)
+    else:
+        # If data is neither a dictionary nor a list nor an int64, return it as is
+        return data
+    
 def get_recommendations(job_title, df, model, top_n=5):
     """
     Generates recommendations based on a given job title.
