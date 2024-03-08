@@ -1,6 +1,6 @@
 # controllers/recommendation_controller.py
 
-# from ..utils.data_preprocessing import preprocess_user_preferences
+from ..utils.data_preprocessing import preprocess_data
 from ..utils.model_loading import load_recommendation_model
 # from ..model import User, Job
 from fuzzywuzzy import fuzz
@@ -15,6 +15,8 @@ if os.path.exists(model_path):
 else:
     print("Model file not found. Please train and save the model first.")
 
+# Load and clean the data from source
+df = preprocess_data()
 
 # def get_recommendations(user_id):
 #     user = User.query.get(user_id)
