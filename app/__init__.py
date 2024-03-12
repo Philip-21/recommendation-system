@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+# Importing and registering the main routes blueprint
+from .routes import all_routes
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -13,6 +15,5 @@ app.config['JWT_SECRET_KEY'] = 'wap12'
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-# Importing and registering the main routes blueprint
-from .routes import all_routes
+
 app.register_blueprint(all_routes)
