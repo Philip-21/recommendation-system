@@ -1,13 +1,11 @@
-version : '3'
+version: "3"
 
 services:
-  recommender-service:
-    build:
-      context: .
-      dockerfile: ./recommender.dockerfile
-      restart: always
-      ports:
-       - "80:5000"
-      deploy:
-        mode: replicated
-        repicas: 1 
+    recommender-service:
+        build:
+            context: .
+            dockerfile: ./recommender.dockerfile
+        restart: always
+        deploy:
+            mode: replicated
+            replicas: 1
