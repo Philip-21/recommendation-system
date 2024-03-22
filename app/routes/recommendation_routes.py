@@ -11,11 +11,14 @@ from ..utils.response_util import json_response
 
 recommendation_bp = Blueprint('recommendation_bp', __name__)
 
-@recommendation_bp.route('/recommend', methods=['POST'])
+@recommendation_bp.route('/recommend', methods=['GET'])
 def recommend():
     try:
-        # Get the job title from the request data
-        job_title = request.json.get('job_title')
+        # Get the job title from the query parameters
+        job_title = request.args.get('job_title')
+
+        if not job_title:
+            return json_response('Missing job_title parameter', 400)
         # Call the get_recommendations function with the job title
         recommendations = get_recommendations(job_title, df, model)
          # Convert any instances of int64 to int in the recommendations

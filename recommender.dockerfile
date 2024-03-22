@@ -13,6 +13,6 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Command to run the Flask app
-CMD [ "python", "utils/app.py" ]
+CMD ["flask", "run", "app.py"]
 
 EXPOSE 5000
